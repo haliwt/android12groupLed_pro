@@ -80,6 +80,10 @@ void Color_ALL_TurnOff(void)
 			  TIM2_SetCompare_4(&htim2, 0);
 	
 }
+void TunrOff_AllLamp(void)
+{
+  lamp_t.sortLamp = noclolr; 
+}
 /**********************************************************
 	*
 	*Function Name:void Color_C505_Switch(uint8_t onvalue)

@@ -55,8 +55,8 @@ static void CheckMode(void)
 		LedOnOff(((inputCmd[1]-0x30)*10+inputCmd[2]-0x30),1);
 		break;
 	case 'C': // 0x43
-		//turnOffAll();
-		Color_ALL_TurnOff();
+		TunrOff_AllLamp();
+		// lamp_t.sortLamp = noclolr; //Color_ALL_TurnOff();
 		break;
 	case 'A':
 		AdjustBrightness(inputCmd[1]);
@@ -81,7 +81,7 @@ void UART_ReceiveDataFunction(void)
 	switch(state)
 	{
 	case STATE_PREAMBLE1:
-		if(aRxBuffer[0]=='M' || aRxBuffer[0]=='Z') //0x4D or 0X56
+		if(aRxBuffer[0]=='M') //0x4D 
 			state=STATE_PREAMBLE2;
 		break;
 	case STATE_PREAMBLE2:
@@ -101,13 +101,13 @@ void UART_ReceiveDataFunction(void)
 			state=STATE_PREAMBLE1; 
 		break;
 	case STATE_CMD:
-		inputCmd[0]=aRxBuffer[0]; //hex:53-->'S' hex:41 -> 'A'
+		inputCmd[0]=aRxBuffer[0]; //hex:53-->'S' hex:41 -> 'A' 0X43 ->CLOSE
 		crcCheck = 0x55 ^ inputCmd[0];
 		//decodeFlag=1;
 		state=STATE_SIZE; //Next receive UART 1 bit new value
 		break;
 	case STATE_SIZE:
-		cmdSize=aRxBuffer[0]-0x30;
+		cmdSize=aRxBuffer[0]-0x30;  //input Number of How many is numbers ?
 		if(cmdSize>MAX_CMD_PARA_SIZE)	// out of range
 		{
 			state=STATE_PREAMBLE1;

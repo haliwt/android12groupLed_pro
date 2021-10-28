@@ -38,5 +38,6 @@ void TIM2_SetCompare_1(TIM_HandleTypeDef* TIMx, uint16_t Compare2);
 void TIM2_SetCompare_2(TIM_HandleTypeDef* TIMx, uint16_t Compare2);
 void TIM2_SetCompare_3(TIM_HandleTypeDef* TIMx, uint16_t Compare2);
 void TIM2_SetCompare_4(TIM_HandleTypeDef* TIMx, uint16_t Compare2);
+void TunrOff_AllLamp(void);
 
 #endif 
