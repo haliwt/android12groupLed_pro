@@ -26,7 +26,8 @@ typedef struct{
 
 extern LAMP_T lamp_t;
 
-void Color_C505_Switch(uint8_t onvalue);;
+void Color_C505_Switch(uint8_t onvalue);
+void Color_450_Switch(uint8_t onvalue);
 void Color_ALL_TurnOff(void);
 
 void LedOnOff(uint8_t ledNum,uint8_t onOff);

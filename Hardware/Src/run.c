@@ -34,7 +34,7 @@ static void UART_ReceiveDataFunction(void);
 		    CheckMode();
 			RunCommand();
 	   }
- 
+       
 }
 /*************************************************************************
  	*

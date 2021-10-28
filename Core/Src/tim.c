@@ -42,9 +42,9 @@ void MX_TIM2_Init(void)
 
   /* USER CODE END TIM2_Init 1 */
   htim2.Instance = TIM2;
-  htim2.Init.Prescaler = 5; //Tim2 f = 24MHz/(5+1)=4MHz
+  htim2.Init.Prescaler = 5;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 79; //Tim2 of Fim2= 4MHZ/(79+1)=0.05MHz =50KHz
+  htim2.Init.Period = 79;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)

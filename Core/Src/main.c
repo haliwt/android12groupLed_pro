@@ -22,12 +22,11 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-#include "run.h"
-#include "led.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "run.h"
+#include "led.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,12 +100,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1) ;  //2.the second turn on Enable
+	HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;  //2.the second turn on Enable
+	HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_4) ;  //2.the second turn on Enable
+    TIM2_SetCompare_1(&htim2,40);
+	TIM2_SetCompare_3(&htim2,40);
+	TIM2_SetCompare_4(&htim2,40);
+	  DecodeCommand();
     /* USER CODE END WHILE */
-	   // TxData(1);
-		Color_C505_Switch(ON);
-	   HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
-       TIM2_SetCompare_2(&htim2, 40);
-	    DecodeCommand();
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

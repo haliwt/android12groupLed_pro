@@ -20,7 +20,7 @@ static uint8_t transferSize;
 static void setLevel_PWM_Color(uint8_t level);
 static void setLevel_PWM_RGB(uint8_t level);
 
-static void TIM2_SetCompare_1(TIM_HandleTypeDef* TIMx, uint16_t Compare1);
+//static void TIM2_SetCompare_1(TIM_HandleTypeDef* TIMx, uint16_t Compare1);
 
 
 //static void TIM2_SetCompare_2(TIM_HandleTypeDef* TIMx, uint16_t Compare2);
@@ -42,7 +42,7 @@ static void Color_White_Switch(uint8_t onvalue);
 
 static void Color_595_Switch(uint8_t onvalue);
 
-static void Color_450_Switch(uint8_t onvalue);
+//static void Color_450_Switch(uint8_t onvalue);
 
 static void Color_365_Switch(uint8_t onvalue);
 static void Color_RGB_Switch(uint8_t onvalue);
@@ -225,7 +225,7 @@ static void Color_595_Switch(uint8_t onvalue)
 }
 
 
-static void Color_450_Switch(uint8_t onvalue)
+void Color_450_Switch(uint8_t onvalue)
 {
      switch(onvalue){
 		 
@@ -286,16 +286,8 @@ static void Color_RGB_Switch(uint8_t onvalue)
 		default:
 		
 		break;
-		
-		
-		
-		
-	}
-	
-	
-	
+		}
 }
-
 /*************************************************************************
  	*
 	*Function Name: void LedOnOff(void)
@@ -307,13 +299,12 @@ static void Color_RGB_Switch(uint8_t onvalue)
 void LedOnOff(uint8_t ledNum,uint8_t onOff)
 {
   // uint8_t temp;
-   if((lastOnLed !=ledNum)||(onOff ==0)){
+    if((lastOnLed !=ledNum)||(onOff ==0)){
 
         //turn off all led 
         Color_ALL_TurnOff();
 
    }
-    
    if(onOff){
 
 	   lastOnLed = ledNum;
@@ -329,33 +320,20 @@ void LedOnOff(uint8_t ledNum,uint8_t onOff)
 
 		   case c_505://PB1 [0] ---oled "UV365"---A
 			    lamp_t.sortLamp = c_505; 
-				Color_RGB_Switch(OFF);
-				Color_365_Switch(OFF);
-				Color_450_Switch(OFF); 
-				Color_595_Switch(OFF);
-				Color_White_Switch(OFF);
-				Color_940_Switch(OFF);
-				Color_850_Switch(OFF);
-				Color_415_Switch(OFF);
-			   	Color_730_Switch(OFF);
 				
-                Color_C505_Switch(1);
-				TxData(1);
+				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
+               
+				//TxData(1);
+		        TxData(9);
                 
            break;
 
 		   case c_730://PA6---oled menu "Violet" {1}
 				lamp_t.sortLamp = c_730;
-				 Color_RGB_Switch(OFF);
-			   	Color_365_Switch(OFF);
-			   Color_450_Switch(OFF); 
-			   Color_595_Switch(OFF);
-			   Color_White_Switch(OFF);
-			   	Color_940_Switch(OFF);
-			   Color_850_Switch(OFF);
-			   Color_415_Switch(OFF);
-		        Color_C505_Switch(OFF);
 				
+					HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
 				Color_730_Switch(ON);
 				TxData(2);
 				
@@ -372,43 +350,52 @@ void LedOnOff(uint8_t ledNum,uint8_t onOff)
 				Color_850_Switch(OFF);
 				Color_C505_Switch(OFF);
 				Color_730_Switch(OFF);
-				
+				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
 				Color_415_Switch(ON);
 					TxData(3);
 				break;
 
 			case c_850: //"Cyan"
 			 	 lamp_t.sortLamp = c_850;
+				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
 					TxData(4);
 				break;
 
 			 case c_940://"Green"
 				lamp_t.sortLamp = c_940;
+				TxData(5);
              break;
 
 			 case c_white: //"Orange"
 				lamp_t.sortLamp = c_white;
+				TxData(6);
              break;
 
 			 case c_595://PB8->R620 
 				
 			    lamp_t.sortLamp = c_595;
+				TxData(7);
             break;
 			
 		   //LEDB -The second group 
 		    case c_450://"640"
 		    	  lamp_t.sortLamp = c_450;
+				  TxData(8);
             break;
 			//low votalge
 			case c_365: //PB6 ->R690
 			
 			  lamp_t.sortLamp = c_365;
+			  TxData(9);
 			     
 			break;
 
 			case c_rgb: //PA12 ->IR740
 			   
 				lamp_t.sortLamp = c_rgb;
+				TxData(10);
 			break;
 			
 			default:
@@ -434,7 +421,7 @@ void RunCommand(void)
 		
 		 	case noclolr:
 		 
-		     Color_ALL_TurnOff();
+		       Color_ALL_TurnOff();
 		 
 		 	break;
 		
@@ -448,7 +435,8 @@ void RunCommand(void)
 				Color_850_Switch(OFF);
 				Color_415_Switch(OFF);
 			   	Color_730_Switch(OFF);
-				
+				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
                 Color_C505_Switch(ON);
 				TxData(0x11);
            break;
@@ -463,7 +451,8 @@ void RunCommand(void)
 			   Color_850_Switch(OFF);
 			   Color_415_Switch(OFF);
 		        Color_C505_Switch(OFF);
-				
+				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
 				Color_730_Switch(ON);
 				TxData(0x22);
            	break;
@@ -478,7 +467,8 @@ void RunCommand(void)
 				Color_850_Switch(OFF);
 				Color_C505_Switch(OFF);
 				Color_730_Switch(OFF);
-				
+				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
 				Color_415_Switch(ON);
 				TxData(0x33);
 				break;
@@ -493,7 +483,8 @@ void RunCommand(void)
 				Color_C505_Switch(OFF);
 				Color_730_Switch(OFF);
 				Color_415_Switch(OFF);
-				
+				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
 			 	Color_850_Switch(ON);
 				 TxData(0x44);
 				break;
@@ -508,7 +499,8 @@ void RunCommand(void)
 				Color_730_Switch(OFF);
 				Color_415_Switch(OFF);
 			 	Color_850_Switch(OFF);
-			 	 
+			 	 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
 				Color_940_Switch(ON);
              break;
 
@@ -522,7 +514,8 @@ void RunCommand(void)
 				Color_415_Switch(OFF);
 			 	Color_850_Switch(OFF);
 			 	Color_940_Switch(OFF);
-			 
+			 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
 			 	Color_White_Switch(ON);
 				
              break;
@@ -537,7 +530,8 @@ void RunCommand(void)
 			 	Color_850_Switch(OFF);
 			 	Color_940_Switch(OFF);
 			    Color_White_Switch(OFF);
-				
+				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
 				Color_595_Switch(ON);
 			   
             break;
@@ -553,7 +547,8 @@ void RunCommand(void)
 			 	Color_940_Switch(OFF);
 			    Color_White_Switch(OFF);
 			    Color_595_Switch(OFF);
-				 
+				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
 				Color_450_Switch(ON);
 		    	 
             break;
@@ -568,7 +563,8 @@ void RunCommand(void)
 			    Color_White_Switch(OFF);
 			    Color_595_Switch(OFF);
 				 Color_450_Switch(OFF);
-				 
+				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			TIM2_SetCompare_2(&htim2, 40);
 				 Color_365_Switch(ON);
 			 break;
 
@@ -699,6 +695,7 @@ static void setLevel_PWM_RGB(uint8_t level)
 void TIM2_SetCompare_1(TIM_HandleTypeDef* TIMx, uint16_t Compare2)
 {
 	TIMx->Instance->CCR1 = Compare2;
+	
 }
 
 void TIM2_SetCompare_2(TIM_HandleTypeDef* TIMx, uint16_t Compare2)
