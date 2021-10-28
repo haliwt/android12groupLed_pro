@@ -70,6 +70,14 @@ void Color_ALL_TurnOff(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, COLOR_W_EN_Pin|GPIO_PIN_1|GPIO_PIN_3|GPIO_PIN_4
                           |GPIO_PIN_5|GPIO_PIN_8, GPIO_PIN_RESET);
+              HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_2) ;  //2.the second turn on Enable
+              HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_1) ;  //2.the second turn on Enable
+			  HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_3) ;  //2.the second turn on Enable
+			  HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_4) ;  //2.the second turn on Enable
+			  TIM2_SetCompare_1(&htim2, 0); //duty cycle 50%= 80*50% =40
+			  TIM2_SetCompare_2(&htim2, 0); //duty cycle 50%= 80*50% =40
+			  TIM2_SetCompare_3(&htim2, 0);
+			  TIM2_SetCompare_4(&htim2, 0);
 	
 }
 /**********************************************************
@@ -272,15 +280,21 @@ static void Color_RGB_Switch(uint8_t onvalue)
 	switch(onvalue){
 		
 		case OFF:
-			  TIM2_SetCompare_2(&htim2, 0); //duty cycle 50%= 80*50% =40
+		      HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_1) ;  //2.the second turn on Enable
+			  HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_3) ;  //2.the second turn on Enable
+			  HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_4) ;  //2.the second turn on Enable
+			  TIM2_SetCompare_1(&htim2, 0); //duty cycle 50%= 80*50% =40
 			  TIM2_SetCompare_3(&htim2, 0);
 			  TIM2_SetCompare_4(&htim2, 0);
 		break;
 		
 		case ON:
-		      TIM2_SetCompare_2(&htim2, 0x28); //duty cycle 50%= 80*50% =40
-			  TIM2_SetCompare_3(&htim2, 0x28);
-			  TIM2_SetCompare_4(&htim2, 0x28);
+		      HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1) ;  //2.the second turn on Enable
+			  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;  //2.the second turn on Enable
+			  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_4) ;  //2.the second turn on Enable
+			  TIM2_SetCompare_1(&htim2,40);
+			  TIM2_SetCompare_3(&htim2,40);
+			  TIM2_SetCompare_4(&htim2,40);
 		break;
 		
 		default:
@@ -315,14 +329,13 @@ void LedOnOff(uint8_t ledNum,uint8_t onOff)
 
 		   case 0://PA7-'White'->newPCB WT.EDIT 2021.08.26 //PA11---[5]---oled "white" oled {0}  //group
 				
-			    
+			    lamp_t.sortLamp = noclolr; 
            break;
 
 		   case c_505://PB1 [0] ---oled "UV365"---A
 			    lamp_t.sortLamp = c_505; 
 				
-				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
-       			TIM2_SetCompare_2(&htim2, 40);
+			
                
 				//TxData(1);
 		        TxData(9);
@@ -332,34 +345,21 @@ void LedOnOff(uint8_t ledNum,uint8_t onOff)
 		   case c_730://PA6---oled menu "Violet" {1}
 				lamp_t.sortLamp = c_730;
 				
-					HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
-       			TIM2_SetCompare_2(&htim2, 40);
-				Color_730_Switch(ON);
+				
 				TxData(2);
 				
            break;
 
 			case c_415: //"Blue2"
 				 lamp_t.sortLamp = c_415;
-				 Color_RGB_Switch(OFF);
-				Color_365_Switch(OFF);
-				Color_450_Switch(OFF); 
-				Color_595_Switch(OFF);
-				Color_White_Switch(OFF);
-				Color_940_Switch(OFF);
-				Color_850_Switch(OFF);
-				Color_C505_Switch(OFF);
-				Color_730_Switch(OFF);
-				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
-       			TIM2_SetCompare_2(&htim2, 40);
-				Color_415_Switch(ON);
+				
+			
 					TxData(3);
 				break;
 
 			case c_850: //"Cyan"
 			 	 lamp_t.sortLamp = c_850;
-				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
-       			TIM2_SetCompare_2(&htim2, 40);
+			
 					TxData(4);
 				break;
 
@@ -379,12 +379,12 @@ void LedOnOff(uint8_t ledNum,uint8_t onOff)
 				TxData(7);
             break;
 			
-		   //LEDB -The second group 
+		  
 		    case c_450://"640"
 		    	  lamp_t.sortLamp = c_450;
 				  TxData(8);
             break;
-			//low votalge
+		
 			case c_365: //PB6 ->R690
 			
 			  lamp_t.sortLamp = c_365;
@@ -422,6 +422,7 @@ void RunCommand(void)
 		 	case noclolr:
 		 
 		       Color_ALL_TurnOff();
+			 
 		 
 		 	break;
 		
@@ -438,7 +439,7 @@ void RunCommand(void)
 				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
        			TIM2_SetCompare_2(&htim2, 40);
                 Color_C505_Switch(ON);
-				TxData(0x11);
+				TxData(0x8);
            break;
 
 		   	case c_730://PA6---oled menu "Violet" {1}

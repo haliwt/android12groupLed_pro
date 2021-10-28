@@ -92,7 +92,7 @@ int main(void)
   MX_TIM2_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-    HAL_UART_Abort(&huart1);
+  HAL_UART_Abort(&huart1);
 	HAL_UART_Receive_IT(&huart1,aRxBuffer,1);
   /* USER CODE END 2 */
 
@@ -100,12 +100,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1) ;  //2.the second turn on Enable
-	HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;  //2.the second turn on Enable
-	HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_4) ;  //2.the second turn on Enable
-    TIM2_SetCompare_1(&htim2,40);
-	TIM2_SetCompare_3(&htim2,40);
-	TIM2_SetCompare_4(&htim2,40);
+    //HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1) ;  //2.the second turn on Enable
+	//HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;  //2.the second turn on Enable
+	//HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_4) ;  //2.the second turn on Enable
+    //TIM2_SetCompare_1(&htim2,60);
+	//TIM2_SetCompare_3(&htim2,20);
+	//TIM2_SetCompare_4(&htim2,10);
+	  //HAL_GPIO_WritePin(COLOR_W_EN_GPIO_Port, COLOR_W_EN_Pin, GPIO_PIN_RESET);
+	 // HAL_GPIO_WritePin(COLOR_C_505_EN_GPIO_Port, COLOR_C_505_EN_Pin, GPIO_PIN_SET);
+	//  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+     //  TIM2_SetCompare_2(&htim2, 40);
+	  
 	  DecodeCommand();
     /* USER CODE END WHILE */
 
