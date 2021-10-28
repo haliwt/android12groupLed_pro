@@ -1,5 +1,6 @@
 #include "run.h"
 #include "usart.h"
+#include "led.h"
 
 
 uint8_t runStep;
@@ -15,7 +16,7 @@ static uint8_t paraIndex;
 static uint8_t crcCheck;
 //static uint8_t level;
 
-static void RunCmd(void);
+static void CheckMode(void);
 static void UART_ReceiveDataFunction(void);
 
 /*************************************************************************
@@ -26,11 +27,12 @@ static void UART_ReceiveDataFunction(void);
 	*Output Ref:No
 	*
 ******************************************************************************/
- void DecodeTestCase(void)
+ void DecodeCommand(void)
  {
        if(decodeFlag){
 			decodeFlag=0;
-		    RunCmd();
+		    CheckMode();
+			RunCommand();
 	   }
  
 }
@@ -42,7 +44,7 @@ static void UART_ReceiveDataFunction(void);
 	*Output Ref:No
 	*
 ******************************************************************************/
-static void RunCmd(void)
+static void CheckMode(void)
 {
 	uint8_t cmdType=inputCmd[0];
 	//uint8_t ret;
@@ -50,24 +52,22 @@ static void RunCmd(void)
 	switch(cmdType)
 	{
 	case 'S':	//	select led  hex:53
-		LedOnOff(((inputCmd[1]-0x30)*10+inputCmd[2]-0x30),1);//ledCtrl(((inputCmd[1]-0x30)*10+inputCmd[2]-0x30),1);
+		LedOnOff(((inputCmd[1]-0x30)*10+inputCmd[2]-0x30),1);
 		break;
 	case 'C': // 0x43
 		//turnOffAll();
-		 mainTurnOff_TheSecondLedB();
-         mainTurnOff_TheFirstLedA();
+		Color_ALL_TurnOff();
 		break;
 	case 'A':
-		changeBrightness(inputCmd[1]);
+		AdjustBrightness(inputCmd[1]);
 	    cmdType = 'S';
 		break;
 	default:
 		break;
 	}
 
-
-
 }
+
 /*************************************************************************
  	*
 	*Function Name: uint8_t BCC(uint8_t *sbytes,uint8_t width)

@@ -23,6 +23,7 @@
 #include "usart.h"
 #include "gpio.h"
 #include "run.h"
+#include "led.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -101,7 +102,11 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	DecodeTestCase();
+	   // TxData(1);
+		Color_C505_Switch(ON);
+	   HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       TIM2_SetCompare_2(&htim2, 40);
+	    DecodeCommand();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

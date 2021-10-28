@@ -2,7 +2,7 @@
 #define __RUN_H__
 #include "main.h"
 
-void DecodeTestCase(void);
+
 
 #define MAX_CMD_PARA_SIZE   8
 
@@ -17,6 +17,8 @@ void DecodeTestCase(void);
 #define STATE_CRC			6	// checksum
 
 extern uint8_t runStep;
+
+ void DecodeCommand(void);
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart);
 
