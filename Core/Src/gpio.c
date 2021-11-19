@@ -45,36 +45,26 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, COLOR_595_EN_Pin|COLOR_450_EN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, COLOR_C_505_EN_Pin|COLOR_730_EN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(COLOR_365_EN_GPIO_Port, COLOR_365_EN_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, COLOR_C_505_EN_Pin|COLOR_730_EN_Pin|COLOR_415_EN_Pin|COLOR_850_EN_Pin
+  HAL_GPIO_WritePin(GPIOA, COLOR_595_EN_Pin|COLOR_450_EN_Pin|COLOR_365_EN_Pin|COLOR_850_EN_Pin
                           |COLOR_940_EN_Pin|GPIO_PIN_8|GPIO_PIN_11|GPIO_PIN_12, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, COLOR_W_EN_Pin|GPIO_PIN_1|GPIO_PIN_3|GPIO_PIN_4
+  HAL_GPIO_WritePin(GPIOB, COLOR_W_EN_Pin|COLOR_415_EN_Pin|GPIO_PIN_1|GPIO_PIN_3|GPIO_PIN_4
                           |GPIO_PIN_5|GPIO_PIN_8, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PCPin PCPin */
-  GPIO_InitStruct.Pin = COLOR_595_EN_Pin|COLOR_450_EN_Pin;
+  GPIO_InitStruct.Pin = COLOR_C_505_EN_Pin|COLOR_730_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = COLOR_365_EN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(COLOR_365_EN_GPIO_Port, &GPIO_InitStruct);
-
   /*Configure GPIO pins : PAPin PAPin PAPin PAPin
                            PAPin PA8 PA11 PA12 */
-  GPIO_InitStruct.Pin = COLOR_C_505_EN_Pin|COLOR_730_EN_Pin|COLOR_415_EN_Pin|COLOR_850_EN_Pin
+  GPIO_InitStruct.Pin = COLOR_595_EN_Pin|COLOR_450_EN_Pin|COLOR_365_EN_Pin|COLOR_850_EN_Pin
                           |COLOR_940_EN_Pin|GPIO_PIN_8|GPIO_PIN_11|GPIO_PIN_12;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
@@ -83,7 +73,7 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : PBPin PB1 PB3 PB4
                            PB5 PB8 */
-  GPIO_InitStruct.Pin = COLOR_W_EN_Pin|GPIO_PIN_1|GPIO_PIN_3|GPIO_PIN_4
+  GPIO_InitStruct.Pin = COLOR_W_EN_Pin|COLOR_415_EN_Pin|GPIO_PIN_1|GPIO_PIN_1|GPIO_PIN_3|GPIO_PIN_4
                           |GPIO_PIN_5|GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;

@@ -58,31 +58,35 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define COLOR_595_EN_Pin 				GPIO_PIN_14
-#define COLOR_595_EN_GPIO_Port 			GPIOC
-#define COLOR_450_EN_Pin 				GPIO_PIN_15
-#define COLOR_450_EN_GPIO_Port 			GPIOC
+//PORTA
+#define COLOR_595_EN_Pin 				    GPIO_PIN_5 //GPIO_PIN_14
+#define COLOR_595_EN_GPIO_Port 			GPIOA //GPIOC
 
-#define COLOR_365_EN_Pin 				GPIO_PIN_8
-#define COLOR_365_EN_GPIO_Port 			GPIOB
+#define COLOR_450_EN_Pin 				    GPIO_PIN_4//GPIO_PIN_15
+#define COLOR_450_EN_GPIO_Port 			GPIOA //GPIOC
 
-#define COLOR_C_505_EN_Pin 				GPIO_PIN_0
-#define COLOR_C_505_EN_GPIO_Port 		GPIOA
+#define COLOR_365_EN_Pin 				    GPIO_PIN_0//GPIO_PIN_8
+#define COLOR_365_EN_GPIO_Port 			GPIOA //GPIOB
 
-#define COLOR_730_EN_Pin 				GPIO_PIN_4
-#define COLOR_730_EN_GPIO_Port 			GPIOA
-
-#define COLOR_415_EN_Pin 				GPIO_PIN_5
-#define COLOR_415_EN_GPIO_Port 			GPIOA
-
-#define COLOR_850_EN_Pin 				GPIO_PIN_6
+#define COLOR_850_EN_Pin 				    GPIO_PIN_6
 #define COLOR_850_EN_GPIO_Port 			GPIOA
 
-#define COLOR_940_EN_Pin 				GPIO_PIN_7
+#define COLOR_940_EN_Pin 				    GPIO_PIN_7
 #define COLOR_940_EN_GPIO_Port 			GPIOA
 
-#define COLOR_W_EN_Pin 					GPIO_PIN_0
-#define COLOR_W_EN_GPIO_Port 			GPIOB
+//PORTB
+#define COLOR_W_EN_Pin 					    GPIO_PIN_0
+#define COLOR_W_EN_GPIO_Port 			  GPIOB
+
+#define COLOR_415_EN_Pin 				    GPIO_PIN_8//GPIO_PIN_5
+#define COLOR_415_EN_GPIO_Port 			GPIOB //GPIOA
+
+//PORTC
+#define COLOR_C_505_EN_Pin 				  GPIO_PIN_15//GPIO_PIN_0
+#define COLOR_C_505_EN_GPIO_Port 		GPIOC //GPIOA
+
+#define COLOR_730_EN_Pin 				    GPIO_PIN_14//GPIO_PIN_4
+#define COLOR_730_EN_GPIO_Port 			GPIOC //GPIOA
 /* USER CODE BEGIN Private defines */
 
 

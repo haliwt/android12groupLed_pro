@@ -12,8 +12,8 @@
 
 extern volatile uint8_t transOngoingFlag;
 typedef enum{OFF,ON}Onoff;
-typedef enum{noclolr,c_505,c_730,c_415,c_850,c_940,c_white,c_595
-             ,c_450,c_365,c_rgb}sortColor;
+typedef enum{nocolor,c_595=0x30,c_450=0x31,c_blue=0x32,c_365=0x33,c_415=0x34,c_white=0x35,c_green=0x36,
+	          c_505=0x37,c_730=0x39,c_940=0x3a,c_850=0x3b,c_red=0x3e}sortColor;
 
 typedef struct{
     
@@ -21,13 +21,17 @@ typedef struct{
     uint8_t runCmd;
     uint8_t pwm_color;
     uint8_t pwm_rgb;
+    uint8_t lamp_brigtness;
+    uint8_t lamp_red;
+    uint8_t lamp_green;
+    uint8_t lamp_blue;
     
 }LAMP_T;
 
 extern LAMP_T lamp_t;
 
-void Color_C505_Switch(uint8_t onvalue);
-void Color_450_Switch(uint8_t onvalue);
+//void Color_C505_Switch(uint8_t onvalue);
+//void Color_450_Switch(uint8_t onvalue);
 void Color_ALL_TurnOff(void);
 
 void LedOnOff(uint8_t ledNum,uint8_t onOff);

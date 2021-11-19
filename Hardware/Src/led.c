@@ -28,7 +28,7 @@ static void setLevel_PWM_RGB(uint8_t level);
 //static void TIM2_SetCompare_3(TIM_HandleTypeDef* TIMx, uint16_t Compare2);
 //static void TIM2_SetCompare_4(TIM_HandleTypeDef* TIMx, uint16_t Compare2);
 
-//static void Color_C505_Switch(uint8_t onvalue);
+static void Color_C505_Switch(uint8_t onvalue);
 
 static void Color_730_Switch(uint8_t onvalue);
 
@@ -42,10 +42,17 @@ static void Color_White_Switch(uint8_t onvalue);
 
 static void Color_595_Switch(uint8_t onvalue);
 
-//static void Color_450_Switch(uint8_t onvalue);
+static void Color_450_Switch(uint8_t onvalue);
 
 static void Color_365_Switch(uint8_t onvalue);
+
+static void Color_NoCombination_Off(void);
+
+static void Color_Red_Switch(uint8_t onvalue);
+static void Color_Green_Switch(uint8_t onvalue);
+static void Color_Blue_Switch(uint8_t onvalue);
 static void Color_RGB_Switch(uint8_t onvalue);
+
 
 /**********************************************************
 	*
@@ -80,9 +87,17 @@ void Color_ALL_TurnOff(void)
 			  TIM2_SetCompare_4(&htim2, 0);
 	
 }
+/**************************************************************************
+	*
+	*Function Name:TunrOff_AllLamp(void)
+	*Function: turn off all lamp 
+	*Input Ref: NO
+	*Return Ref: NO 
+	*
+***************************************************************************/
 void TunrOff_AllLamp(void)
 {
-  lamp_t.sortLamp = noclolr; 
+  lamp_t.sortLamp = nocolor; 
 }
 /**********************************************************
 	*
@@ -92,7 +107,7 @@ void TunrOff_AllLamp(void)
 	*Return Ref: NO 
 	*
 **********************************************************/
-void Color_C505_Switch(uint8_t onvalue)
+static void Color_C505_Switch(uint8_t onvalue)
 {
       switch(onvalue){
 		 
@@ -237,7 +252,7 @@ static void Color_595_Switch(uint8_t onvalue)
 }
 
 
-void Color_450_Switch(uint8_t onvalue)
+static void Color_450_Switch(uint8_t onvalue)
 {
      switch(onvalue){
 		 
@@ -277,10 +292,136 @@ static void Color_365_Switch(uint8_t onvalue)
 	 }
 
 }
-
-static void Color_RGB_Switch(uint8_t onvalue)
+/*****************************************************************************************************
+ * *
+ *Function Name: Color_Red_Switch(uint8_t onvalue)
+ *Function:
+ *Input Ref: 1--on,0-off
+ *Return Ref:
+ *
+ *
+******************************************************************************************************/
+static void Color_Red_Switch(uint8_t onvalue)
 {
 	
+	switch(onvalue){
+		
+		case OFF:
+		     
+			  HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_3) ;  //2.color red PWM 
+	          TIM2_SetCompare_3(&htim2, 0);
+			 
+		break;
+		
+		case ON:
+		      
+			HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;  //2.color red PWM 
+			TIM2_SetCompare_3(&htim2,40);
+			  
+		break;
+		
+		default:
+		
+		break;
+		}
+}
+/*****************************************************************************************************
+ * *
+ *Function Name: Color_Green_Switch(uint8_t onvalue)
+ *Function:
+ *Input Ref: 1--on,0-off
+ *Return Ref:
+ *
+ *
+******************************************************************************************************/
+static void Color_Green_Switch(uint8_t onvalue)
+{
+	
+	switch(onvalue){
+		
+		case OFF:
+		 
+			  HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_4) ;  // color green PWM
+			
+			  TIM2_SetCompare_4(&htim2, 0);
+		break;
+		
+		case ON:
+		     
+			  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_4) ;  //2.color green PWM
+			  TIM2_SetCompare_4(&htim2,40);
+		break;
+		
+		default:
+		
+		break;
+		}
+}
+/*****************************************************************************************************
+ * *
+ *Function Name: Color_Blue_Switch(uint8_t onvalue)
+ *Function:
+ *Input Ref: 1--on,0-off
+ *Return Ref:
+ *
+ *
+******************************************************************************************************/
+static void Color_Blue_Switch(uint8_t onvalue)
+{
+	
+	switch(onvalue){
+		
+		case OFF:
+		      HAL_TIM_PWM_Stop(&htim2,TIM_CHANNEL_1) ;  // color blue PWM
+			
+			  TIM2_SetCompare_1(&htim2, 0); //duty cycle 50%= 80*50% =40
+			 
+		break;
+		
+		case ON:
+		    HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1) ;  // color blue PWM
+	        TIM2_SetCompare_1(&htim2,40);
+			
+		break;
+		
+		default:
+		
+		break;
+		}
+}
+/*********************************************************************
+ * *
+ *Function Name:static void Color_NoCombination_Off(void)
+ *Function:
+ *Input Ref: NO
+ *Return Ref:NO
+ *
+*********************************************************************/
+static void Color_NoCombination_Off(void)
+{
+	Color_C505_Switch(OFF);
+	Color_730_Switch(OFF);
+	Color_415_Switch(OFF);
+	Color_850_Switch(OFF);
+	Color_940_Switch(OFF);
+	Color_White_Switch(OFF);
+	Color_595_Switch(OFF);
+	Color_450_Switch(OFF);
+	Color_365_Switch(OFF);
+	
+	
+}
+/*****************************************************************************************************
+ * *
+ *Function Name: Color_Blue_Switch(uint8_t onvalue)
+ *Function:
+ *Input Ref: 1--on,0-off
+ *Return Ref:
+ *
+ *
+******************************************************************************************************/
+static void Color_RGB_Switch(uint8_t onvalue)
+{
 	switch(onvalue){
 		
 		case OFF:
@@ -333,74 +474,117 @@ void LedOnOff(uint8_t ledNum,uint8_t onOff)
 
 		   case 0://PA7-'White'->newPCB WT.EDIT 2021.08.26 //PA11---[5]---oled "white" oled {0}  //group
 				
-			    lamp_t.sortLamp = noclolr; 
-           break;
-
-		   case c_505://PB1 [0] ---oled "UV365"---A
-			    lamp_t.sortLamp = c_505; 
-				
-			
-               
-				//TxData(1);
-		        TxData(9);
-                
-           break;
-
-		   case c_730://PA6---oled menu "Violet" {1}
-				lamp_t.sortLamp = c_730;
-				
-				
-				TxData(2);
-				
-           break;
-
-			case c_415: //"Blue2"
-				 lamp_t.sortLamp = c_415;
-				
-			
-					TxData(3);
-				break;
-
-			case c_850: //"Cyan"
-			 	 lamp_t.sortLamp = c_850;
-			
-					TxData(4);
-				break;
-
-			 case c_940://"Green"
-				lamp_t.sortLamp = c_940;
-				TxData(5);
-             break;
-
-			 case c_white: //"Orange"
-				lamp_t.sortLamp = c_white;
-				TxData(6);
-             break;
-
-			 case c_595://PB8->R620 
-				
+			    lamp_t.pwm_color=1;
+			    lamp_t.pwm_rgb=0;
 			    lamp_t.sortLamp = c_595;
-				TxData(7);
+				lamp_t.lamp_blue=0;
+				lamp_t.lamp_green=0;
+				lamp_t.lamp_red =0; 
+		
+           break;
+
+		   case 0x01:// [1]
+		        lamp_t.pwm_color=1;
+			    lamp_t.pwm_rgb=0;
+			    lamp_t.sortLamp = c_450; 
+				lamp_t.lamp_blue=0;
+				lamp_t.lamp_green=0;
+				lamp_t.lamp_red =0;
+           break;
+
+		   case 0x02:// "blue"
+		    lamp_t.pwm_color=1;
+			lamp_t.lamp_blue=1;
+			lamp_t.pwm_rgb=1;
+			lamp_t.sortLamp = c_blue;
+			//	TxData(2);
+				
+           break;
+
+			case 0x03: //3
+			    lamp_t.pwm_color=1;
+			  	lamp_t.pwm_rgb=0;
+				lamp_t.sortLamp = c_365;
+				lamp_t.lamp_blue=0;
+				lamp_t.lamp_green=0;
+				lamp_t.lamp_red =0;
+				break;
+
+			case 0x04: //4
+				lamp_t.pwm_color=1;
+			  	lamp_t.pwm_rgb=0;
+			 	lamp_t.sortLamp = c_415;
+				lamp_t.lamp_blue=0;
+				lamp_t.lamp_green=0;
+				lamp_t.lamp_red =0;
+		
+				break;
+			
+			case 0x05:
+				lamp_t.pwm_color=1;
+			  	lamp_t.pwm_rgb=0;
+			 	lamp_t.sortLamp = c_white;
+				lamp_t.lamp_blue=0;
+				lamp_t.lamp_green=0;
+				lamp_t.lamp_red =0;
+			break;
+
+			 case 0x06:// "green"
+			 	 lamp_t.pwm_color=1;
+				 lamp_t.lamp_green=1;
+			     lamp_t.pwm_rgb=1;
+				lamp_t.sortLamp = c_green;
+			
+             break;
+
+			 case 0x07: //7
+			     lamp_t.pwm_color=1;
+			     lamp_t.pwm_rgb=0;
+				lamp_t.sortLamp = c_505;
+				lamp_t.lamp_blue=0;
+				lamp_t.lamp_green=0;
+				lamp_t.lamp_red =0;
+             break;
+
+			 case 0x09://9
+				lamp_t.pwm_color=1;
+			    lamp_t.pwm_rgb=0;
+			    lamp_t.sortLamp = c_730;
+				lamp_t.lamp_blue=0;
+				lamp_t.lamp_green=0;
+				lamp_t.lamp_red =0;
+            break;
+			
+			case 0x0A://
+				lamp_t.pwm_color=1;
+			    lamp_t.pwm_rgb=0;
+			    lamp_t.sortLamp = c_940;
+				lamp_t.lamp_blue=0;
+				lamp_t.lamp_green=0;
+				lamp_t.lamp_red =0;
+            break;
+			
+			case 0x0B://
+				lamp_t.pwm_color=1;
+			    lamp_t.pwm_rgb=0;
+			    lamp_t.sortLamp = c_850;
+				lamp_t.lamp_blue=0;
+				lamp_t.lamp_green=0;
+				lamp_t.lamp_red =0;
             break;
 			
 		  
-		    case c_450://"640"
-		    	  lamp_t.sortLamp = c_450;
-				  TxData(8);
+		    case 0xE:// "red"
+		    	 
+			  lamp_t.pwm_color=1;
+			  lamp_t.lamp_red=1;
+			  lamp_t.pwm_rgb=1;
+			  lamp_t.sortLamp = c_red;
+				 
             break;
 		
-			case c_365: //PB6 ->R690
 			
-			  lamp_t.sortLamp = c_365;
-			  TxData(9);
-			     
-			break;
-
-			case c_rgb: //PA12 ->IR740
-			   
-				lamp_t.sortLamp = c_rgb;
-				TxData(10);
-			break;
+		
 			
 			default:
 			
@@ -423,14 +607,15 @@ void RunCommand(void)
 {
 	switch(lamp_t.sortLamp){
 		
-		 	case noclolr:
-		 
-		       Color_ALL_TurnOff();
+		 	case nocolor:
+		 		lamp_t.pwm_color=0;
+			    lamp_t.pwm_rgb=0;
+		        Color_ALL_TurnOff();
 			 
 		 
 		 	break;
 		
-			case c_505://PB1 [0] ---oled "UV365"---A
+			case c_505://1
 				Color_RGB_Switch(OFF);
 				Color_365_Switch(OFF);
 				Color_450_Switch(OFF); 
@@ -443,10 +628,10 @@ void RunCommand(void)
 				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
        			TIM2_SetCompare_2(&htim2, 40);
                 Color_C505_Switch(ON);
-				TxData(0x8);
+				//TxData(0x8);
            break;
 
-		   	case c_730://PA6---oled menu "Violet" {1}
+		   	case c_730://2
 			   Color_RGB_Switch(OFF);
 			   	Color_365_Switch(OFF);
 			   Color_450_Switch(OFF); 
@@ -459,10 +644,10 @@ void RunCommand(void)
 				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
        			TIM2_SetCompare_2(&htim2, 40);
 				Color_730_Switch(ON);
-				TxData(0x22);
+				//TxData(0x22);
            	break;
 
-			case c_415: //"Blue2"
+			case c_415: //3
 				Color_RGB_Switch(OFF);
 				Color_365_Switch(OFF);
 				Color_450_Switch(OFF); 
@@ -475,10 +660,10 @@ void RunCommand(void)
 				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
        			TIM2_SetCompare_2(&htim2, 40);
 				Color_415_Switch(ON);
-				TxData(0x33);
+			//	TxData(0x33);
 				break;
 
-			case c_850: //"Cyan"
+			case c_850: //4
 				Color_RGB_Switch(OFF);
 				Color_365_Switch(OFF);
 				Color_450_Switch(OFF); 
@@ -491,10 +676,10 @@ void RunCommand(void)
 				HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
        			TIM2_SetCompare_2(&htim2, 40);
 			 	Color_850_Switch(ON);
-				 TxData(0x44);
+				// TxData(0x44);
 				break;
 
-			 case c_940://"Green"
+			 case c_940://5
 			 	Color_RGB_Switch(OFF);
 			 	Color_365_Switch(OFF);
 			 	Color_450_Switch(OFF); 
@@ -509,7 +694,7 @@ void RunCommand(void)
 				Color_940_Switch(ON);
              break;
 
-			 case c_white: //"Orange"
+			 case c_white: //6
 			  Color_RGB_Switch(OFF);
 			 	Color_365_Switch(OFF);
 			 	Color_450_Switch(OFF); 
@@ -525,7 +710,7 @@ void RunCommand(void)
 				
              break;
 
-			 case c_595://PB8->R620
+			 case c_595://7
 			 	Color_RGB_Switch(OFF);
 			 	Color_365_Switch(OFF);
 			 	Color_450_Switch(OFF); 
@@ -552,6 +737,7 @@ void RunCommand(void)
 			 	Color_940_Switch(OFF);
 			    Color_White_Switch(OFF);
 			    Color_595_Switch(OFF);
+				
 				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
        			TIM2_SetCompare_2(&htim2, 40);
 				Color_450_Switch(ON);
@@ -560,20 +746,6 @@ void RunCommand(void)
 			//low votalge
 			case c_365: //PB6 ->R690
 				Color_RGB_Switch(OFF);
-				 Color_C505_Switch(OFF);
-				Color_730_Switch(OFF);
-				Color_415_Switch(OFF);
-			 	Color_850_Switch(OFF);
-			 	Color_940_Switch(OFF);
-			    Color_White_Switch(OFF);
-			    Color_595_Switch(OFF);
-				 Color_450_Switch(OFF);
-				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
-       			TIM2_SetCompare_2(&htim2, 40);
-				 Color_365_Switch(ON);
-			 break;
-
-			case c_rgb: //PA12 ->IR740
 				Color_C505_Switch(OFF);
 				Color_730_Switch(OFF);
 				Color_415_Switch(OFF);
@@ -581,13 +753,61 @@ void RunCommand(void)
 			 	Color_940_Switch(OFF);
 			    Color_White_Switch(OFF);
 			    Color_595_Switch(OFF);
-				Color_450_Switch(OFF);
-				Color_365_Switch(OFF);
-				
-				Color_RGB_Switch(ON);
+				 Color_450_Switch(OFF);
+				 
+				 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
+       			 TIM2_SetCompare_2(&htim2, 40);
+				 Color_365_Switch(ON);
+			 break;
+
+			case c_red: //PA12 ->IR740
+				Color_NoCombination_Off();
+				Color_Red_Switch(ON);
+				if(lamp_t.lamp_green==1){
+				   Color_Green_Switch(ON);
+				}
+				if(lamp_t.lamp_blue==1){
+				  Color_Blue_Switch(ON);
+				}
 			   
 			
 			break;
+			
+			case c_green: //PA12 ->IR740
+				Color_NoCombination_Off();
+			
+				Color_Green_Switch(ON);
+				if(lamp_t.lamp_red==1){
+				   Color_Red_Switch(ON);
+				}
+				if(lamp_t.lamp_blue==1){
+				  Color_Blue_Switch(ON);
+				}
+			   
+			
+			break;
+			case c_blue: //PA12 ->IR740
+				Color_NoCombination_Off();
+				
+				Color_Blue_Switch(ON);
+				if(lamp_t.lamp_green==1){
+				   Color_Green_Switch(ON);
+				}
+				if(lamp_t.lamp_red==1){
+				  Color_Red_Switch(ON);
+				}
+			   
+			
+			break;
+			
+			
+			case 0x20: //adjust --
+			  AdjustBrightness(lamp_t.lamp_brigtness);
+			
+			
+			break;
+			
+		
 			
 			default:
 			
@@ -607,7 +827,7 @@ void AdjustBrightness(uint8_t dir)
 {
 	if(hasLedOn)
 	{
-		if(lamp_t.pwm_color == 1 && lamp_t.pwm_rgb == 0 ){
+		if(lamp_t.pwm_color == 1){
 			if(dir=='1')	// adj +
 				{
 					level_color+=LEVEL_STEP;
@@ -623,22 +843,7 @@ void AdjustBrightness(uint8_t dir)
 				}
 			setLevel_PWM_Color(level_color);
 		}
-		if(lamp_t.pwm_rgb == 1){
-			if(dir=='1')	// adj +
-				{
-					level_rgb+=LEVEL_STEP;
-					if(level_rgb>LEVEL_MAX ) level_rgb=LEVEL_MAX ;
-				}
-				else	// adj -
-				{
-                    if (level_rgb < LEVEL_MIN+LEVEL_STEP)
-                               level_rgb = LEVEL_MIN;
-					else level_rgb -=LEVEL_STEP;
-                    
-								
-				}
-		    setLevel_PWM_RGB(level_rgb);
-		}
+		
 	}
 }
 /*************************************************
@@ -661,7 +866,7 @@ static void setLevel_PWM_Color(uint8_t level)
     }
     
 	 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
-	 TIM2_SetCompare_1(&htim2, pwmValue);
+	 TIM2_SetCompare_2(&htim2, pwmValue);
 }
 /*************************************************************************
  	*

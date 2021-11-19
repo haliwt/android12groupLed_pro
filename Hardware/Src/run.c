@@ -59,8 +59,9 @@ static void CheckMode(void)
 		// lamp_t.sortLamp = noclolr; //Color_ALL_TurnOff();
 		break;
 	case 'A':
-		AdjustBrightness(inputCmd[1]);
-	    cmdType = 'S';
+		//AdjustBrightness(inputCmd[1]);
+		lamp_t.sortLamp = 0x20;
+	   // cmdType = 'S';
 		break;
 	default:
 		break;
@@ -127,6 +128,7 @@ void UART_ReceiveDataFunction(void)
 		break;
 	case STATE_PARA:
 		inputCmd[paraIndex]=aRxBuffer[0];
+		lamp_t.lamp_brigtness=aRxBuffer[0];
 		crcCheck ^= aRxBuffer[0];
 		paraIndex++;
 		cmdSize--;
