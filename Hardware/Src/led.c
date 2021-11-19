@@ -493,15 +493,16 @@ void LedOnOff(uint8_t ledNum,uint8_t onOff)
            break;
 
 		   case 0x02:// "blue"
-		    lamp_t.pwm_color=1;
+		    lamp_t.pwm_color=0; //judge that ifnot R G B of adjust brightness
 			lamp_t.lamp_blue=1;
 			lamp_t.pwm_rgb=1;
 			lamp_t.sortLamp = c_blue;
-			//	TxData(2);
-				
+			lamp_t.pwm_red=0;
+			lamp_t.pwm_green=0;
+			lamp_t.pwm_blue=1;				
            break;
 
-			case 0x03: //3
+		  case 0x03: //3
 			    lamp_t.pwm_color=1;
 			  	lamp_t.pwm_rgb=0;
 				lamp_t.sortLamp = c_365;
@@ -530,10 +531,13 @@ void LedOnOff(uint8_t ledNum,uint8_t onOff)
 			break;
 
 			 case 0x06:// "green"
-			 	 lamp_t.pwm_color=1;
+			 	 lamp_t.pwm_color=0;
 				 lamp_t.lamp_green=1;
 			     lamp_t.pwm_rgb=1;
 				lamp_t.sortLamp = c_green;
+				lamp_t.pwm_red=0;
+			  	lamp_t.pwm_green=1;
+			  	lamp_t.pwm_blue=0;
 			
              break;
 
@@ -576,10 +580,13 @@ void LedOnOff(uint8_t ledNum,uint8_t onOff)
 		  
 		    case 0xE:// "red"
 		    	 
-			  lamp_t.pwm_color=1;
+			  lamp_t.pwm_color=0; //
 			  lamp_t.lamp_red=1;
 			  lamp_t.pwm_rgb=1;
 			  lamp_t.sortLamp = c_red;
+			  lamp_t.pwm_red=1;
+			  lamp_t.pwm_green=0;
+			  lamp_t.pwm_blue=0;
 				 
             break;
 		
@@ -827,7 +834,7 @@ void AdjustBrightness(uint8_t dir)
 {
 	if(hasLedOn)
 	{
-		if(lamp_t.pwm_color == 1){
+		if(lamp_t.pwm_color == 1 && lamp_t.pwm_rgb !=1){
 			if(dir=='1')	// adj +
 				{
 					level_color+=LEVEL_STEP;
@@ -842,6 +849,25 @@ void AdjustBrightness(uint8_t dir)
 								
 				}
 			setLevel_PWM_Color(level_color);
+		}
+		
+		if(lamp_t.pwm_rgb==1 && lamp_t.pwm_color !=1){
+			
+			if(dir=='1')	// adj +
+				{
+					level_rgb+=LEVEL_STEP;
+					if(level_rgb>LEVEL_MAX ) level_rgb=LEVEL_MAX ;
+				}
+				else	// adj -
+				{
+                    if (level_rgb < LEVEL_MIN+LEVEL_STEP)
+                               level_rgb= LEVEL_MIN;
+					else level_rgb -=LEVEL_STEP;
+                    
+								
+				}
+			  setLevel_PWM_RGB(level_rgb);
+			
 		}
 		
 	}
@@ -886,12 +912,26 @@ static void setLevel_PWM_RGB(uint8_t level)
     if(pwmValue > LEVEL_PWM_MAX){
 		pwmValue= LEVEL_PWM_MAX;
     }
-	HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1) ;  //2.the second turn on Enable
-	HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;  //2.the second turn on Enable
-	HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_4) ;  //2.the second turn on Enable
-    TIM2_SetCompare_1(&htim2,pwmValue);
-	TIM2_SetCompare_3(&htim2,pwmValue);
-	TIM2_SetCompare_4(&htim2,pwmValue);
+	
+	if(lamp_t.pwm_red ==1){
+		
+		HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3) ;  //2.pwm red 
+	    TIM2_SetCompare_3(&htim2,pwmValue);
+		
+	}
+	else if(lamp_t.pwm_green==1){
+	
+		HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_4) ;  //pwm green 
+		TIM2_SetCompare_4(&htim2,pwmValue);
+		
+	}
+	else if(lamp_t.pwm_blue==1){
+		HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_1) ;  // pwm blue
+	
+		TIM2_SetCompare_1(&htim2,pwmValue);
+	
+		
+	}
 	
 }
 /*************************************************************************

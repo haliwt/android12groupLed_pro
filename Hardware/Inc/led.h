@@ -20,6 +20,9 @@ typedef struct{
     uint8_t sortLamp;
     uint8_t runCmd;
     uint8_t pwm_color;
+    uint8_t pwm_red;
+    uint8_t pwm_green;
+    uint8_t pwm_blue;
     uint8_t pwm_rgb;
     uint8_t lamp_brigtness;
     uint8_t lamp_red;
