@@ -8,7 +8,7 @@
 #define LEVEL_MAX        10
 
 #define LEVEL_ZERO        0
-#define LEVEL_STEP		  3 ////WT.EDIT 2021.05.31
+#define LEVEL_STEP		  20 ////WT.EDIT 2021.05.31
 #define LEVEL_PWM_STEP   20
 #define LEVEL_PWM_MAX	  80//
 
@@ -31,6 +31,9 @@ typedef struct{
     uint8_t lamp_red;
     uint8_t lamp_green;
     uint8_t lamp_blue;
+    uint8_t pwmRed_flag;
+    uint8_t pwmGreen_flag;
+    uint8_t pwmBlue_flag;
     uint16_t pwm_redValue;
     uint16_t pwm_greenValue;
     uint16_t pwm_blueValue;

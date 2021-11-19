@@ -11,14 +11,14 @@ LAMP_T lamp_t;
 
 static uint8_t lastOnLed = 0xff;
 static uint8_t hasLedOn;
-static uint8_t level_color;
+
 static uint8_t level_rgb;
 static uint8_t outputBuf[MAX_BUFFER_SIZE];
 static uint8_t transferSize;
 
 
-static void setLevel_PWM_Color(uint8_t level);
-static void setLevel_PWM_RGB(uint8_t level);
+static void setLevel_PWM_Color(uint16_t level);
+static void setLevel_PWM_RGB(uint16_t level);
 
 //static void TIM2_SetCompare_1(TIM_HandleTypeDef* TIMx, uint16_t Compare1);
 
@@ -841,21 +841,23 @@ void RunCommand(void)
 ******************************************************************************/
 void AdjustBrightness(uint8_t dir)
 {
-	static int16_t level_red,level_green,level_blue;
+	static int16_t level_red,level_green,level_blue,level_color;
 	if(hasLedOn)
 	{
 		if(lamp_t.pwm_color == 1 && lamp_t.pwm_rgb !=1){
 			if(dir=='1')	// adj +
 				{
 					level_color+=LEVEL_STEP;
-					if(level_color>LEVEL_MAX ) level_color=LEVEL_MAX ;
+					if(level_color>LEVEL_PWM_MAX) level_color=LEVEL_PWM_MAX ;
 				}
 				else	// adj -
 				{
-                    if (level_color < LEVEL_MIN+LEVEL_STEP)
-                               level_color= LEVEL_MIN;
+                    if (level_color < LEVEL_PWM_MIN || level_color==0 )
+                               level_color= LEVEL_PWM_MIN;
 					else level_color -=LEVEL_STEP;
                     
+					if (level_color < LEVEL_PWM_MIN || level_color==0 )
+                               level_color= LEVEL_PWM_MIN;
 								
 				}
 			setLevel_PWM_Color(level_color);
@@ -933,19 +935,11 @@ void AdjustBrightness(uint8_t dir)
 	*Output Ref:No
 	*
 **************************************************/
-static void setLevel_PWM_Color(uint8_t level)
+static void setLevel_PWM_Color(uint16_t level)
 {
-  	uint16_t pwmValue;
-	if(level<LEVEL_MIN)level=LEVEL_MIN;
-	
-    pwmValue =(level)*LEVEL_PWM_STEP;// level * LEVEL_PWM_STEP;
-	
-    if(pwmValue > LEVEL_PWM_MAX){
-		pwmValue= LEVEL_PWM_MAX;
-    }
-    
+  
 	 HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_2);
-	 TIM2_SetCompare_2(&htim2, pwmValue);
+	 TIM2_SetCompare_2(&htim2, level);
 }
 /*************************************************************************
  	*
@@ -955,7 +949,7 @@ static void setLevel_PWM_Color(uint8_t level)
 	*Output Ref:No
 	*
 ******************************************************************************/
-static void setLevel_PWM_RGB(uint8_t level)
+static void setLevel_PWM_RGB(uint16_t level)
 {
    	
     if(lamp_t.pwm_red ==1){
